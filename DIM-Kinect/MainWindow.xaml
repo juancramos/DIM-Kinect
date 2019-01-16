@@ -7,6 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Image x:Name="kinect_Img"/>
+        <Label x:Name="msj_Label" Content="" HorizontalAlignment="Center"  VerticalAlignment="Bottom" FontSize="20"/>
+
     </Grid>
 </Window>
