@@ -7,8 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <StackPanel Margin="0,0,680,340">
+            <TextBlock Text="SELECT SOURSE" />
+            <RadioButton GroupName="Os" Content="None" Name="NoneSelection" Checked="NoneSelection_Checked" IsChecked="True"/>
+            <RadioButton GroupName="Os" Content="Color" Name="ColorSelection" Checked="ColorSelection_Checked" />
+            <RadioButton GroupName="Os" Content="IR" Name="IRSelection" Checked="IRSelection_Checked"/>
+            <RadioButton GroupName="Os" Content="Bone" Name="BoneSelection" Checked="BoneSelection_Checked"/>
+        </StackPanel>
         <Image x:Name="kinect_Img"/>
         <Label x:Name="msj_Label" Content="" HorizontalAlignment="Center"  VerticalAlignment="Bottom" FontSize="20"/>
-
+        <Canvas Name="canvasEsqueleto" Height="429" Width="612"/>
     </Grid>
 </Window>
