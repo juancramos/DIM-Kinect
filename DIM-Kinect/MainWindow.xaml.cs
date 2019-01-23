@@ -1,4 +1,7 @@
-﻿using Microsoft.Kinect;
+﻿using Kinect.Toolbox;
+using Microsoft.Kinect;
+using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -12,6 +15,9 @@ namespace DIM_Kinect
     public partial class MainWindow : Window
     {
         private KinectSensor sensor;
+        private SwipeGestureDetector swipeGestureRecognizer;
+        private TemplatedGestureDetector circleGestureRecognizer;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -34,11 +40,44 @@ namespace DIM_Kinect
                 this.sensor.ColorFrameReady += SensorColorFrameReady;
                 this.sensor.DepthFrameReady += SensorDepthFrameReady;
                 this.sensor.SkeletonFrameReady += miKinect_SkeletonFrameReady;
+                swipeGestureRecognizer = new SwipeGestureDetector();
+                swipeGestureRecognizer.OnGestureDetected  += OnGestureDetectedSwipe;
+
+                using (Stream recordStream = File.Open(System.IO.Path.Combine(Environment.CurrentDirectory, @"Templates\circleKB.save"), FileMode.Open))
+                {
+                    circleGestureRecognizer = new TemplatedGestureDetector("Circle", recordStream);
+                    circleGestureRecognizer.OnGestureDetected += OnGestureDetectedCircle;
+                }
             }
             catch
             {
                 invalidate();
                 msj_Label.Content = "Kinect can not be initialized.";
+            }
+        }
+
+        private void OnGestureDetectedCircle(string gesture)
+        {
+            switch (gesture)
+            {
+                case "Circle":
+                    this.canvasEsqueleto.Visibility = this.canvasEsqueleto.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void OnGestureDetectedSwipe(string gesture)
+        {
+            switch (gesture)
+            {
+                case "SwipeToLeft":
+                    if (this.ColorSelection.IsChecked == true) this.IRSelection.IsChecked = true;
+                    else if (this.IRSelection.IsChecked == true) this.ColorSelection.IsChecked = true;
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -168,6 +207,18 @@ namespace DIM_Kinect
 
                     foreach (Joint joint in skeleton.Joints)
                     {
+                        if (skeleton.TrackingState != SkeletonTrackingState.Tracked)
+                            continue;
+
+                        if (joint.JointType == JointType.HandLeft)
+                        {
+                            swipeGestureRecognizer.Add(joint.Position, sensor);
+                        }
+                        else if (joint.JointType == JointType.HandRight)
+                        {
+                            circleGestureRecognizer.Add(joint.Position, sensor);
+                        }
+
                         Ellipse point = new Ellipse();
                         point.Stroke = new SolidColorBrush(Colors.Red);
                         point.StrokeThickness = 8;
@@ -216,9 +267,8 @@ namespace DIM_Kinect
         {
             if (this.sensor != null)
             {
-                this.sensor.Start();
+                if (!this.sensor.IsRunning) this.sensor.Start();
                 this.sensor.DepthStream.Disable();
-                this.sensor.SkeletonStream.Disable();
                 this.sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
             }
         }
@@ -227,9 +277,8 @@ namespace DIM_Kinect
         {
             if (this.sensor != null)
             {
-                this.sensor.Start();
+                if (!this.sensor.IsRunning) this.sensor.Start();
                 this.sensor.ColorStream.Disable();
-                this.sensor.SkeletonStream.Disable();
                 this.sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
             }
         }
@@ -238,9 +287,9 @@ namespace DIM_Kinect
         {
             if (this.sensor != null)
             {
-                this.sensor.Start();
-                this.sensor.ColorStream.Disable();
-                this.sensor.SkeletonStream.Enable();
+                if (!this.sensor.IsRunning) this.sensor.Start();
+                if (this.BoneSelection.IsChecked == true) this.sensor.SkeletonStream.Enable();
+                else this.sensor.SkeletonStream.Disable();
             }
         }
     }
