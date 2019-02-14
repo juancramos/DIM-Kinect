@@ -1,0 +1,22 @@
+﻿<Page x:Class="DIM_Kinect.KinectInteraction"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DIM_Kinect"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="KinectInteraction">
+    <Grid>
+        <StackPanel Margin="0,0,680,340">
+            <TextBlock Text="SELECT SOURSE" />
+            <RadioButton GroupName="Os" Content="None" Name="NoneSelection" Checked="NoneSelection_Checked" IsChecked="True"/>
+            <RadioButton GroupName="Os" Content="Color" Name="ColorSelection" Checked="ColorSelection_Checked" />
+            <RadioButton GroupName="Os" Content="IR" Name="IRSelection" Checked="IRSelection_Checked"/>
+            <CheckBox Content="Bone" Name="BoneSelection" Checked="BoneSelection_Checked"/>
+        </StackPanel>
+        <Image x:Name="kinect_Img"/>
+        <Label x:Name="msj_Label" Content="" HorizontalAlignment="Center"  VerticalAlignment="Bottom" FontSize="20"/>
+        <Canvas Name="canvasEsqueleto" Height="429" Width="612"/>
+    </Grid>
+</Page>
