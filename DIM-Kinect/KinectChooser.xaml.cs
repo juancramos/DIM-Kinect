@@ -1,5 +1,6 @@
 ﻿using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit;
+using Microsoft.Kinect.Toolkit.Controls;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +21,13 @@ namespace DIM_Kinect
         private void Page_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             this.sensorChooser = new KinectSensorChooser(); this.sensorChooser.KinectChanged += SensorChooserOnKinectChanged; this.sensorChooserUi.KinectSensorChooser = this.sensorChooser; this.sensorChooser.Start();
+
+            for (int i = 0; i < 50; i++)
+            {
+                KinectCircleButton c = new KinectCircleButton { Height = 100, Content = i, Tag = i };
+                c.Click += ButtonOnClick;
+                scrollContent.Children.Add(c);
+            }
         }
 
         private void SensorChooserOnKinectChanged(object sender, KinectChangedEventArgs args)
@@ -59,7 +67,8 @@ namespace DIM_Kinect
 
         private void ButtonOnClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("¡Estupendo!");
+            FrameworkElement source = (FrameworkElement)e.OriginalSource;
+            MessageBox.Show($"¡Estupendo! {source.Tag}");
         }
     }
 }

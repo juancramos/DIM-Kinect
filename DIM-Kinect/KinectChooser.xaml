@@ -18,13 +18,8 @@
             <k:KinectTileButton Label="Púlsame!" Click="ButtonOnClick" Margin="78,65,502,164.818"></k:KinectTileButton>
             <k:KinectCircleButton Label="Circle" HorizontalAlignment="Right" Height="200" Click="ButtonOnClick" Margin="0,65,117,184.818">Hi</k:KinectCircleButton>
         </Grid>
-
-        <!--<StackPanel Margin="0,0,680,340">
-            <TextBlock Text="SELECT SOURSE" />
-            <RadioButton GroupName="Os" Content="None" Name="NoneSelection" Checked="NoneSelection_Checked" IsChecked="True"/>
-            <RadioButton GroupName="Os" Content="Color" Name="ColorSelection" Checked="ColorSelection_Checked" />
-            <RadioButton GroupName="Os" Content="IR" Name="IRSelection" Checked="IRSelection_Checked"/>
-            <CheckBox Content="Bone" Name="BoneSelection" Checked="BoneSelection_Checked"/>
-        </StackPanel>-->
+        <k:KinectScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" VerticalAlignment="Bottom">
+            <StackPanel Orientation="Horizontal" Name="scrollContent" />
+        </k:KinectScrollViewer>
     </Grid>
 </Page>
